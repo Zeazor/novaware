@@ -6,8 +6,10 @@
 body {
   font-family: Arial;
   background: #111;
-  color: white;
+  color: #eee;
   text-align: center;
+  margin: 0;
+  padding: 0 12px 40px;
 }
 h1 {
   margin-top: 50px;
@@ -20,6 +22,70 @@ h1 {
 
 <h1>🌐 Welcome to Novaware</h1>
 <p>Your website is working!</p>
+
+<!-- Category controls -->
+<div id="categories" class="categories">
+  <button class="cat-btn active" data-cat="all">All</button>
+  <button class="cat-btn" data-cat="news">News</button>
+  <button class="cat-btn" data-cat="tutorial">Tutorials</button>
+  <button class="cat-btn" data-cat="project">Projects</button>
+</div>
+
+<!-- Sample content that will be filtered by category -->
+<div id="items" class="items">
+  <article class="item" data-category="news">
+    <h2>Release v1.2</h2>
+    <p>Latest release notes and updates.</p>
+  </article>
+  <article class="item" data-category="tutorial">
+    <h2>How to deploy</h2>
+    <p>Step-by-step deployment guide.</p>
+  </article>
+  <article class="item" data-category="project">
+    <h2>Open-source library</h2>
+    <p>See our newest project on GitHub.</p>
+  </article>
+  <article class="item" data-category="news">
+    <h2>Company Blog</h2>
+    <p>Monthly updates and stories.</p>
+  </article>
+</div>
+
+<script>
+// Category filter logic
+(function(){
+  const cats = document.getElementById('categories');
+  const items = Array.from(document.querySelectorAll('.item'));
+
+  function setActive(button){
+    Array.from(cats.querySelectorAll('.cat-btn')).forEach(b=>b.classList.remove('active'));
+    button.classList.add('active');
+  }
+
+  function filterCategory(cat){
+    items.forEach(it => {
+      const c = it.getAttribute('data-category');
+      if(cat === 'all' || c === cat) it.style.display = '';
+      else it.style.display = 'none';
+    });
+  }
+
+  cats.addEventListener('click', (e)=>{
+    const btn = e.target.closest('.cat-btn');
+    if(!btn) return;
+    const cat = btn.getAttribute('data-cat');
+    setActive(btn);
+    filterCategory(cat);
+    // update hash so a link can share the filter
+    history.replaceState(null, '', '#'+cat);
+  });
+
+  // Restore from hash on load
+  const initial = (location.hash||'#all').substring(1);
+  const initBtn = cats.querySelector(`.cat-btn[data-cat="${initial}"]`);
+  if(initBtn) initBtn.click();
+})();
+</script>
 
 </body>
 </html>
