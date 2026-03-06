@@ -1,91 +1,176 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Novaware</title>
-<style>
-body {
-  font-family: Arial;
-  background: #111;
-  color: #eee;
-  text-align: center;
-  margin: 0;
-  padding: 0 12px 40px;
-}
-h1 {
-  margin-top: 50px;
-  font-size: 3em;
-}
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Novaware</title>
+  <style>
+    :root{
+      --bg:#0b0c0f;
+      --panel: rgba(255,255,255,0.03);
+      --muted: #bfc4c9;
+      --accent: #5dd6d6;
+      --accent-2: #ff7b72;
+      --glass: rgba(255,255,255,0.04);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, Arial;
+      background: linear-gradient(180deg,var(--bg) 0%, #0f1113 100%);
+      color:#eef2f5; -webkit-font-smoothing:antialiased;
+    }
+    .wrap{max-width:1100px;margin:36px auto;padding:0 20px}
+    header{display:flex;align-items:center;justify-content:space-between;gap:16px}
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo{width:48px;height:48px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:flex;align-items:center;justify-content:center;font-weight:700}
+    h1{font-size:1.2rem;margin:0}
+    p.lead{margin:6px 0 0;color:var(--muted);font-size:.95rem}
+
+    /* Category nav */
+    nav.categories{display:flex;gap:8px;align-items:center;margin:20px 0;flex-wrap:wrap}
+    .cat{position:relative;padding:8px 12px;border-radius:999px;background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--muted);cursor:pointer;transition:all .15s;}
+    .cat:hover{transform:translateY(-3px);box-shadow:0 6px 18px rgba(0,0,0,0.5);border-color:var(--glass);color:#fff}
+    .cat.active{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#081018;border:none}
+    .cat .badge{display:inline-block;margin-left:8px;font-size:.8rem;color:rgba(255,255,255,0.85);opacity:.9}
+
+    /* Grid */
+    .items{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;margin-top:14px}
+    .card{background:var(--panel);border:1px solid rgba(255,255,255,0.03);padding:16px;border-radius:12px;transition:transform .16s,box-shadow .16s;min-height:120px}
+    .card:hover{transform:translateY(-6px);box-shadow:0 18px 40px rgba(0,0,0,0.6)}
+    .card h3{margin:0 0 8px;font-size:1.05rem}
+    .card p{margin:0;color:var(--muted);font-size:.95rem}
+    .tag{display:inline-block;padding:6px 8px;border-radius:999px;font-size:.78rem;background:rgba(255,255,255,0.03);color:var(--muted);margin-top:12px}
+
+    /* subtle fade for hidden items */
+    .card.hidden{opacity:0;transform:scale(.98);pointer-events:none;height:0;padding:0;margin:0;border:0}
+
+    /* footer */
+    footer{margin:30px 0;color:var(--muted);font-size:.9rem;text-align:center}
+
+    @media (max-width:520px){.logo{width:40px;height:40px}.cat{padding:7px 10px}}
+  </style>
 </head>
-
 <body>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <div class="logo">N</div>
+        <div>
+          <h1>Novaware</h1>
+          <p class="lead">Curated updates, guides, and projects.</p>
+        </div>
+      </div>
+      <div style="text-align:right;color:var(--muted);font-size:.9rem">v1.0</div>
+    </header>
 
-<h1>🌐 Welcome to Novaware</h1>
-<p>Your website is working!</p>
+    <!-- Categories (hover to preview, click to lock) -->
+    <nav id="categories" class="categories" aria-label="Categories">
+      <button class="cat active" data-cat="all" aria-pressed="true">All <span class="badge">4</span></button>
+      <button class="cat" data-cat="news">News <span class="badge">2</span></button>
+      <button class="cat" data-cat="tutorial">Tutorials <span class="badge">1</span></button>
+      <button class="cat" data-cat="project">Projects <span class="badge">1</span></button>
+    </nav>
 
-<!-- Category controls -->
-<div id="categories" class="categories">
-  <button class="cat-btn active" data-cat="all">All</button>
-  <button class="cat-btn" data-cat="news">News</button>
-  <button class="cat-btn" data-cat="tutorial">Tutorials</button>
-  <button class="cat-btn" data-cat="project">Projects</button>
-</div>
+    <!-- Content -->
+    <main>
+      <section id="items" class="items" aria-live="polite">
+        <article class="card" data-category="news">
+          <h3>Release v1.2</h3>
+          <p>We've shipped performance improvements and bug fixes across the platform.</p>
+          <div class="tag">News</div>
+        </article>
 
-<!-- Sample content that will be filtered by category -->
-<div id="items" class="items">
-  <article class="item" data-category="news">
-    <h2>Release v1.2</h2>
-    <p>Latest release notes and updates.</p>
-  </article>
-  <article class="item" data-category="tutorial">
-    <h2>How to deploy</h2>
-    <p>Step-by-step deployment guide.</p>
-  </article>
-  <article class="item" data-category="project">
-    <h2>Open-source library</h2>
-    <p>See our newest project on GitHub.</p>
-  </article>
-  <article class="item" data-category="news">
-    <h2>Company Blog</h2>
-    <p>Monthly updates and stories.</p>
-  </article>
-</div>
+        <article class="card" data-category="tutorial">
+          <h3>How to deploy</h3>
+          <p>A step‑by‑step guide showing a minimal, repeatable deployment workflow.</p>
+          <div class="tag">Tutorial</div>
+        </article>
 
-<script>
-// Category filter logic
-(function(){
-  const cats = document.getElementById('categories');
-  const items = Array.from(document.querySelectorAll('.item'));
+        <article class="card" data-category="project">
+          <h3>Open‑source library</h3>
+          <p>Our new library helps you compose UI components quickly and accessibly.</p>
+          <div class="tag">Project</div>
+        </article>
 
-  function setActive(button){
-    Array.from(cats.querySelectorAll('.cat-btn')).forEach(b=>b.classList.remove('active'));
-    button.classList.add('active');
-  }
+        <article class="card" data-category="news">
+          <h3>Company Blog</h3>
+          <p>Monthly highlights, stories, and community news.</p>
+          <div class="tag">News</div>
+        </article>
+      </section>
+    </main>
 
-  function filterCategory(cat){
-    items.forEach(it => {
-      const c = it.getAttribute('data-category');
-      if(cat === 'all' || c === cat) it.style.display = '';
-      else it.style.display = 'none';
-    });
-  }
+    <footer>Hover a category to preview items; click to lock a selection.</footer>
+  </div>
 
-  cats.addEventListener('click', (e)=>{
-    const btn = e.target.closest('.cat-btn');
-    if(!btn) return;
-    const cat = btn.getAttribute('data-cat');
-    setActive(btn);
-    filterCategory(cat);
-    // update hash so a link can share the filter
-    history.replaceState(null, '', '#'+cat);
-  });
+  <script>
+    // Hover-based category filtering with optional click-to-lock
+    (function(){
+      const cats = document.getElementById('categories');
+      const buttons = Array.from(cats.querySelectorAll('.cat'));
+      const items = Array.from(document.querySelectorAll('.card'));
+      let locked = null; // data-cat string when user clicks to lock
 
-  // Restore from hash on load
-  const initial = (location.hash||'#all').substring(1);
-  const initBtn = cats.querySelector(`.cat-btn[data-cat="${initial}"]`);
-  if(initBtn) initBtn.click();
-})();
-</script>
+      function showCategory(cat){
+        items.forEach(it => {
+          const c = it.getAttribute('data-category');
+          if(cat === 'all' || c === cat){
+            it.classList.remove('hidden');
+          } else {
+            it.classList.add('hidden');
+          }
+        });
+      }
 
+      function setActiveButton(activeCat){
+        buttons.forEach(b=>{
+          const c = b.getAttribute('data-cat');
+          const isActive = c === activeCat;
+          b.classList.toggle('active', isActive);
+          b.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+        });
+      }
+
+      // Hover behavior
+      buttons.forEach(btn=>{
+        const cat = btn.getAttribute('data-cat');
+        btn.addEventListener('mouseenter', ()=>{
+          if(locked) return; // ignore hover if locked
+          setActiveButton(cat);
+          showCategory(cat);
+        });
+        btn.addEventListener('mouseleave', ()=>{
+          if(locked) return;
+          setActiveButton('all');
+          showCategory('all');
+        });
+        // Click toggles lock
+        btn.addEventListener('click', ()=>{
+          const currently = btn.getAttribute('data-cat');
+          if(locked === currently){
+            locked = null; setActiveButton('all'); showCategory('all');
+          } else {
+            locked = currently; setActiveButton(currently); showCategory(currently);
+          }
+        });
+      });
+
+      // Initialize counts in badges (in case content changes)
+      function refreshCounts(){
+        const counts = items.reduce((acc,it)=>{acc[it.getAttribute('data-category')] = (acc[it.getAttribute('data-category')]||0)+1; return acc},{})
+        buttons.forEach(b=>{
+          const key = b.getAttribute('data-cat');
+          const badge = b.querySelector('.badge');
+          if(badge) badge.textContent = (key === 'all') ? items.length : (counts[key] || 0);
+        })
+      }
+      refreshCounts();
+
+      // Respect anchor on load (optional)
+      const initial = (location.hash||'#all').substring(1);
+      const initialBtn = buttons.find(b=>b.getAttribute('data-cat')===initial);
+      if(initialBtn){ initialBtn.click(); }
+    })();
+  </script>
 </body>
 </html>
